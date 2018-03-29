@@ -1,6 +1,7 @@
 package mybatis.controllers;
 
 import mybatis.model.zomato.CityRoot;
+import mybatis.model.zomato.CollectionsRoot;
 import mybatis.services.ZomatoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,11 @@ public class ZomatoController {
     public CityRoot getCityID (@RequestParam(value="city", defaultValue = "Singapore") String query,
                                @RequestParam(value="insert",defaultValue = "false") boolean insert){
         return zomatoService.getCityID(query,insert);
+    }
+
+    @RequestMapping("/getCollections")
+    public CollectionsRoot getCollections (@RequestParam(value="cityID", defaultValue = "74") int cityID) {
+        return zomatoService.getCollections(cityID);
     }
 
 }

@@ -6,11 +6,11 @@ public class CityRoot {
     location_suggestions [] location_suggestions;
 
     //getters and setters
-    public mybatis.model.zomato.location_suggestions[] getLocation_suggestions() {
+    public location_suggestions[] getLocation_suggestions() {
         return location_suggestions;
     }
 
-    public void setLocation_suggestions(mybatis.model.zomato.location_suggestions[] location_suggestions) {
+    public void setLocation_suggestions(location_suggestions[] location_suggestions) {
         this.location_suggestions = location_suggestions;
     }
 }

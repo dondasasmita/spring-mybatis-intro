@@ -2,6 +2,7 @@ package mybatis.services;
 import mybatis.mappers.zomato.ZomatoMapper;
 import mybatis.model.zomato.CityOverview;
 import mybatis.model.zomato.CityRoot;
+import mybatis.model.zomato.CollectionsRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -53,7 +54,6 @@ public class ZomatoService {
 
 
 
-
     //method that saves the query to the database
     public void saveCityIdData(CityRoot response){
 
@@ -70,11 +70,28 @@ public class ZomatoService {
         zomatoMapper.insertCityID(summary);
     }
 
-    //create a method that search collection of restaurants
+    //create a method that search collections of restaurants
+    public CollectionsRoot getCollections (int cityID){
 
-        // use the search city id method to get the ID and store it in a variable
-        // pass the variable to the query to get collection
+        // use the get city id method to get the ID and store it in a variable
+//        boolean insert = false;
+//        int cityID = getCityID(cityName,insert).getLocation_suggestions()[0].getId();
+//        String cityID = Integer.toString(getCityID(cityName,insert).getLocation_suggestions()[0].getId());
+
+        //sending the API Key in the header each time request is made
+        HttpEntity<String> request = new HttpEntity<>(sendApiInHeader());
+
+        // pass the variable to the query to get collections
+        String url = "https://developers.zomato.com/api/v2.1/collections?city_id="+cityID;
+
+        //using restTemplate to send the request using exchange method
+        CollectionsRoot response = restTemplate.exchange(url, HttpMethod.GET, request, CollectionsRoot.class).getBody();
+
+        return response;
+
         // save the list to the database
+    }
+
 
 
 }

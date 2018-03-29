@@ -105,4 +105,9 @@ public class UserService {
         userMapper.deleteUser(id);
         return userMapper.getByID(id);
     }
+
+    //get user by age method
+    public ArrayList<User> getUserByAge(int age){
+        return userMapper.getUserByAge(age);
+    }
 }

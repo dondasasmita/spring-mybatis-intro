@@ -16,7 +16,7 @@ public class GreetingController {
     @Autowired
     RestTemplate restTemplate;
 
-    private static final String template = "Hello, %s!";
+    private static final String template = "Hi, %s!";
     private final AtomicLong counter = new AtomicLong();
 
     @RequestMapping("/greeting")

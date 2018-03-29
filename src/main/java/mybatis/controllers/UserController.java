@@ -1,9 +1,6 @@
 package mybatis.controllers;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicLong;
-
-import mybatis.model.Greeting;
 import mybatis.model.User;
 import mybatis.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,4 +51,12 @@ public class UserController {
     public User deleteById(@RequestParam(value="id")int id){
         return userService.deleteById(id);
     }
+
+    //get user by age
+    @RequestMapping("/age")
+    public ArrayList<User> getUsers(@RequestParam(value="age") int age) {
+        return userService.getUserByAge(age);
+    }
+
+
 }

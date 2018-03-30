@@ -23,8 +23,9 @@ public class ZomatoController {
     }
 
     @RequestMapping("/getCollections")
-    public CollectionsRoot getCollections (@RequestParam(value="cityID", defaultValue = "74") int cityID) {
-        return zomatoService.getCollections(cityID);
+    public CollectionsRoot getCollections (@RequestParam(value="cityID", defaultValue = "74") String cityName,
+                                           @RequestParam(value="insert",defaultValue = "false") boolean insert) {
+        return zomatoService.getCollections(cityName,insert);
     }
 
 }

@@ -1,6 +1,8 @@
 package mybatis.controllers;
 
 import java.util.ArrayList;
+
+import mybatis.Exceptions.UnauthorizedException;
 import mybatis.model.User;
 import mybatis.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ public class UserController {
     @Autowired
     UserService userService;
 
-
     //RequestMapping maps URLs to methods
 
     //Get
@@ -23,8 +24,12 @@ public class UserController {
     }
 
     @RequestMapping("/{id}")
-    public User getById(@PathVariable(value="id")int id) {
-        return userService.getById(id);
+    public User getById(@PathVariable(value="id") int id,
+                        @RequestParam(value="apikey") String key) throws UnauthorizedException {
+
+        if(userService.authenticate(id,key)) {
+            return userService.getById(id);
+        } else throw new UnauthorizedException("Your API Key does not match. Please check again.");
     }
 
     @RequestMapping("/manual")
@@ -53,10 +58,10 @@ public class UserController {
     }
 
     //get user by age
-    @RequestMapping("/age")
-    public ArrayList<User> getUsers(@RequestParam(value="age") int age) {
-        return userService.getUserByAge(age);
-    }
+//    @RequestMapping("/age")
+//    public ArrayList<User> getUsers(@RequestParam(value="age") int age) {
+//        return userService.getUserByAge(age);
+//    }
 
 
 }

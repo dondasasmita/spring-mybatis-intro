@@ -5,6 +5,10 @@ import mybatis.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.xml.bind.DatatypeConverter;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -78,7 +82,6 @@ public class UserService {
                 users.add(u);
             }
 
-
         } catch (ClassNotFoundException cnf) {
             cnf.printStackTrace();
         } catch (SQLException se) {
@@ -88,11 +91,28 @@ public class UserService {
         return users;
     }
 
-    //add new user
+    //add new user and generate apiKey
     public User addNew(User user) {
+        try{
+            user.setApiKey(generateAPI(128));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         userMapper.insertUser(user);
         return userMapper.getByName(user.getFirst_name());
     }
+
+    //this is a method to generate an API Key in a String
+    public static String generateAPI(final int keyLen) throws NoSuchAlgorithmException {
+
+        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+        keyGen.init(keyLen);
+        SecretKey secretKey = keyGen.generateKey();
+        byte[] encoded = secretKey.getEncoded();
+        return DatatypeConverter.printHexBinary(encoded).toLowerCase();
+
+    }
+
 
     //update user by its id
     public User updateById(User user) {
@@ -107,7 +127,26 @@ public class UserService {
     }
 
     //get user by age method
-    public ArrayList<User> getUserByAge(int age){
-        return userMapper.getUserByAge(age);
+//    public ArrayList<User> getUserByAge(int age){
+//        return userMapper.getUserByAge(age);
+//    }
+
+    //a method to verify the apiKey
+    public boolean authenticate(int user_id, String apiKey) {
+
+        boolean apiIsVerified;
+
+        String apiKeyInDB = userMapper.getByID(user_id).getApiKey();
+
+        // check db to see if key is valid and user is active
+        if (apiKeyInDB.equalsIgnoreCase(apiKey) && userMapper.getByID(user_id).getIsActive() != 0 ){
+            apiIsVerified = true;
+        } else apiIsVerified = false;
+
+        return apiIsVerified;
     }
+
+
+
+
 }

@@ -131,7 +131,7 @@ public class UserService {
 //        return userMapper.getUserByAge(age);
 //    }
 
-    //a method to verify the apiKey
+    //a method to verify if the apiKey matches the apiKey provided after registration
     public boolean authenticate(int user_id, String apiKey) {
 
         boolean apiIsVerified;
@@ -145,8 +145,5 @@ public class UserService {
 
         return apiIsVerified;
     }
-
-
-
 
 }

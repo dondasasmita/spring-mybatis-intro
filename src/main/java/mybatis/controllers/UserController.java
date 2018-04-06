@@ -23,6 +23,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    //Get ID and get the result if API Key is a match. Example: localhost8080:/users/4?apikey=<theAPIKEY>
     @RequestMapping("/{id}")
     public User getById(@PathVariable(value="id") int id,
                         @RequestParam(value="apikey") String key) throws UnauthorizedException {
@@ -47,14 +48,22 @@ public class UserController {
 
     //Update
     @RequestMapping(method = RequestMethod.PATCH, value = "/")
-    public User updateById(@RequestBody User user) {
-        return userService.updateById(user);
+    public User updateById(@RequestBody User user, @RequestParam(name = "apiKey") String key) throws UnauthorizedException {
+
+        if(userService.authenticate(user.getId(),key)){
+            return userService.updateById(user);
+        } else throw new UnauthorizedException("Your API Key does not match. Please check again.");
+
     }
 
     //Delete
     @RequestMapping(method= RequestMethod.DELETE, value="/")
-    public User deleteById(@RequestParam(value="id")int id){
-        return userService.deleteById(id);
+    public User deleteById(@RequestParam(value="id")int id,
+                           @RequestParam(name = "apiKey") String key) throws UnauthorizedException {
+        if(userService.authenticate(id,key)) {
+            return userService.deleteById(id);
+        } else throw new UnauthorizedException("Your API Key does not match. Please check again.");
+
     }
 
     //get user by age
